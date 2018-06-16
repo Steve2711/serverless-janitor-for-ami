@@ -79,8 +79,9 @@ def janitor_for_ami():
             amisDeleted['Images'].append({'ImageId': ami['ImageId'], 'OriginalInstanceID': OriginalInstanceID, 'AMI-Name': ami['Name'], 'OwnerId': ami['OwnerId']})
             for dev in ami['BlockDeviceMappings']:
                 try:
-                    ec2_client.delete_snapshot( SnapshotId = dev['Ebs']['SnapshotId'] )
-                    logger.info('Deleted snapshot {0}'.format( dev['Ebs']['SnapshotId'] ) )
+                    if dev['Ebs']:
+                        ec2_client.delete_snapshot( SnapshotId = dev['Ebs']['SnapshotId'] )
+                        logger.info('Deleted snapshot {0}'.format( dev['Ebs']['SnapshotId'] ) )
                 except ClientError as e:
                     logger.error('ERROR: Not able to delete Snapshot. {0}'.format( str(e) ) )
                     pass
