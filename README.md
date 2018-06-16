@@ -1,7 +1,7 @@
 # Serverless Janitor for Amazon Machine Images(AMI)
 Automated AMI creation is essential for continuous delivery. If you are using my [Serverless AMI Baker](https://github.com/miztiik/Serverless-AMI-Baker/blob/master/README.MD) or any other automation, clean up of AMIs that are past the rentention date is important to keeps costs under control.
 
-![Fig : Valaxy-Serverless-Security-Group-Sentry](https://raw.githubusercontent.com/miztiik/serverless-janitor-ebs-snapshots/master/images/serverless-janitor-ebs-snapshots.png)
+![Fig : Serverless-Janitor-for-AMI](https://raw.githubusercontent.com/miztiik/serverless-janitor-for-ami/master/images/serverless-janitor-for-ami.png)
 
 This AWS Lambda function will help you to automatically de-register AMIs beyond retention date and remove the corresponding EBS Snapshots
 You can also follow this article in **[Youtube]()**
