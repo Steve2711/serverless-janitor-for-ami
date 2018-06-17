@@ -3,7 +3,8 @@ Automated AMI creation is essential for continuous delivery. If you are using my
 
 ![Fig : Serverless-Janitor-for-AMI](https://raw.githubusercontent.com/miztiik/serverless-janitor-for-ami/master/images/serverless-janitor-for-ami.png)
 
-This AWS Lambda function will help you to automatically de-register AMIs beyond retention date and remove the corresponding EBS Snapshots
+This AWS Lambda function will help you to automatically de-register AMIs beyond retention date and remove the corresponding EBS Snapshots.
+
 You can also follow this article in **[Youtube](https://www.youtube.com/watch?v=tCeK7sEgjvw&t=0s&list=PLxzKY3wu0_FKok5gI1v4g4S-g-PLaW9YD&index=24)**
 
 ## Pre-Requisities
