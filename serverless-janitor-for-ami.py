@@ -34,8 +34,18 @@ def setGlobalVars():
     try:
         if os.environ['findNeedle']:
             globalVars['findNeedle']  = os.environ['findNeedle']
+    except KeyError as e:
+        logger.error("User Customization Environment variables are not set")
+        logger.error('ERROR: {0}'.format( str(e) ) )
+
+    try:        
         if os.environ['RetentionDays']:
             globalVars['RetentionDays'] = os.environ['RetentionDays']
+    except KeyError as e:
+        logger.error("User Customization Environment variables are not set")
+        logger.error('ERROR: {0}'.format( str(e) ) )
+        
+    try:        
         if os.environ['tagsToExclude']:
             globalVars['tagsToExclude']  = os.environ['tagsToExclude']
     except KeyError as e:
@@ -68,11 +78,11 @@ def janitor_for_ami():
 
     for ami in amis_to_remove['Images']:
 
-            # Get the instance ID tag, if it was set
-            OriginalInstanceID = ''
-            for tag in ami['Tags']:
-                if tag['Key'] == 'OriginalInstanceID' :
-                    OriginalInstanceID = tag['Value']
+        # Get the instance ID tag, if it was set
+        OriginalInstanceID = ''
+        for tag in ami['Tags']:
+            if tag['Key'] == 'OriginalInstanceID' :
+                OriginalInstanceID = tag['Value']
         try:
             ec2_client.deregister_image(ImageId=ami['ImageId'])
         except ClientError as e:
