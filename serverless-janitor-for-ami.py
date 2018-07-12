@@ -67,28 +67,30 @@ def janitor_for_ami():
     amisDeleted['Total-AMI-Found'] = len(amis_to_remove['Images'])
 
     for ami in amis_to_remove['Images']:
-        try:
+
             # Get the instance ID tag, if it was set
             OriginalInstanceID = ''
             for tag in ami['Tags']:
                 if tag['Key'] == 'OriginalInstanceID' :
                     OriginalInstanceID = tag['Value']
-
+        try:
             ec2_client.deregister_image(ImageId=ami['ImageId'])
-            logger.info('Deregistered AMI = {0}'.format( ami['ImageId'] ) )
-            amisDeleted['Images'].append({'ImageId': ami['ImageId'], 'OriginalInstanceID': OriginalInstanceID, 'AMI-Name': ami['Name'], 'OwnerId': ami['OwnerId']})
-            for dev in ami['BlockDeviceMappings']:
-                try:
-                    if dev['Ebs']:
-                        ec2_client.delete_snapshot( SnapshotId = dev['Ebs']['SnapshotId'] )
-                        logger.info('Deleted snapshot {0}'.format( dev['Ebs']['SnapshotId'] ) )
-                except ClientError as e:
-                    logger.error('ERROR: Not able to delete Snapshot. {0}'.format( str(e) ) )
-                    pass
         except ClientError as e:
             logger.error('ERROR: Not able to delete AMI. {0}'.format( str(e) ) )
             amisDeleted['ImgRemovalFailures'].append( {'Description': str(e), 'ImageId': ami['ImageId'] } )
-            pass
+            return amisDeleted
+
+        for dev in ami['BlockDeviceMappings']:
+            try:
+                if 'Ebs' in dev:
+                    ec2_client.delete_snapshot( SnapshotId = dev['Ebs']['SnapshotId'] )
+                    logger.info('Deleted snapshot {0}'.format( dev['Ebs']['SnapshotId'] ) )
+            except ClientError as e:
+                logger.error('ERROR: Not able to delete Snapshot. {0}'.format( str(e) ) )
+                pass
+
+        logger.info('Deregistered AMI = {0}'.format( ami['ImageId'] ) )
+        amisDeleted['Images'].append({'ImageId': ami['ImageId'], 'OriginalInstanceID': OriginalInstanceID, 'AMI-Name': ami['Name'], 'OwnerId': ami['OwnerId']})
 
     amisDeleted['AMIs-Deleted']= len(amisDeleted['Images'])
 
