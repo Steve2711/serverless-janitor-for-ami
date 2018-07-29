@@ -15,7 +15,7 @@ globalVars['tagsToExclude']         = "Do-Not-Delete"
 
 ec2_client = boto3.client('ec2')
 
-# Set the log format
+# Set the log format - Too many lines, need to sort this
 logger = logging.getLogger()
 for h in logger.handlers:
   logger.removeHandler(h)
